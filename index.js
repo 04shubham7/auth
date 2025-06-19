@@ -56,7 +56,16 @@ app.post('/signup', (req, res) => {
     console.log(users);
 });
 
-
+app.get('/me', (req, res) => {
+  // Read token from 'authorization' header (e.g., Authorization: Bearer <token>)
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+  const Fuser = users.find(user => user.token === token);
+  if (!Fuser) {
+    return res.status(401).send('Unauthorized');
+  }  
+  res.status(200).json({ username: Fuser.username, password: Fuser.password });
+});
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
 }   );
