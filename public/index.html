@@ -38,9 +38,26 @@ try{
 
     }
 
+    async function getUserInfo() {
+        try {
+            const response = await axios.get("http://localhost:3000/me", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+            // Optionally update UI with user info
+            if (response.data && response.data.username) {
+                document.getElementById('information').innerText = `Welcome, ${response.data.username}`;
+            }
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+        }
+    }
+    getUserInfo();
     function logout() {
+        localStorage.removeItem("token");
         document.getElementById('information').innerText = '';
-        alert('Logged out!');
+        alert('Logged out successfully!');
     }
     </script>
 </head>
