@@ -1,13 +1,17 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-
+const cors = require('cors');
 const app = express();
-
+app.use(cors());
 app.use(express.json());
 
 const users = [];
+function logger(req, res, next) {
+    console.log(`${req.method} ${req.url}`);
+    next();
+}
 
-app.post('/signin', (req, res) => { 
+app.post('/signin', logger,(req, res) => { 
 const username = req.body.username;
 const password = req.body.password;
 const fuser= users.find(user => user.username === username && user.password === password);
@@ -15,9 +19,9 @@ if (!fuser) {
     return res.status(401).json({ message: 'Invalid username or password' });
 }
 const token = jwt.sign({ username }, 'your_secret_key', { expiresIn: '1h' });
-res.json({ token });
+res.json({ token , username:fuser.username });
 });
-app.post('/signup', (req, res) => { 
+app.post('/signup',  logger,(req, res) => { 
 const username = req.body.username;
 const password = req.body.password;
 users.push({ username, password });
@@ -38,7 +42,8 @@ function auth(req, res, next) {
     }
 }
 
-app.get('/me', auth, (req, res) => {
+app.get('/me', auth, logger, (req, res) => {
+   
     const user = users.find(u => u.username === req.user.username);
     if (!user) {
         return res.status(404).json({ message: 'User not found' });
@@ -48,8 +53,9 @@ app.get('/me', auth, (req, res) => {
 
 
 
-app.get('/todo', auth, (req, res) => {
-
+app.get('/pass', auth, (req, res) => {
+ const currentUser = req.user;
+ res.json({ username: currentUser.username });
 });
 
 app.post('/todo', auth, (req, res) => {
