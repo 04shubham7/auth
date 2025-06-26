@@ -1,0 +1,26 @@
+// Description: This code demonstrates how to generate a JWT token using the jsonwebtoken library in Node.js.// It includes the necessary imports, sets up an Express server, and generates a token with a secret key.
+// The token can be used for authentication in a web application.
+const jwt=require('jsonwebtoken');
+const express = require('express'); 
+
+const app = express();
+app.use(express.json());
+
+// decode,verify,generate
+const val={
+    name:"Shubham",
+    acc_no:"1234567890",
+}
+
+// jwt
+const token=jwt.sign(val,"secret");
+// this token has been generated using the secret key "secret" and the value object
+// The token can be used to authenticate requests
+
+console.log(token);
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+
+
