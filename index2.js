@@ -24,3 +24,21 @@ app.listen(3000, () => {
 });
 
 
+
+// TRY CATCH BLOCK
+
+function getLength(name){
+    return name.length;
+}
+try{
+    const ans=getLength("Shubham");
+    console.log(ans);
+}catch(e){
+    console.log("Error: " + e.message);
+    // This will catch any error that occurs in the try block
+    // and log the error message to the console
+}
+// The above code will throw an error because the getLength function expects a parameter
+// but it is called without any arguments. The catch block will handle the error and log the message.
+// This is a simple example of error handling in JavaScript using try-catch blocks.
+console.log("hi there")
